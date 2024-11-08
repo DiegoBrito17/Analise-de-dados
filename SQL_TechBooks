@@ -1,0 +1,132 @@
+Projeto para uma empresa fictícia chamada **TechBooks**, uma loja online de livros. A empresa precisa de uma base de dados para gerenciar seus produtos, clientes e pedidos. Segue a descrição dos requisitos e as perguntas que a empresa gostaria de resolver com SQL. 
+
+---
+
+### Cenário: Loja Online de Livros - TechBooks
+
+**Descrição:**  
+A **TechBooks** é uma loja de e-commerce especializada em livros físicos e digitais. Para otimizar a gestão, eles querem um banco de dados que armazene informações sobre os livros, clientes, e pedidos realizados. Eles desejam também entender melhor os padrões de compra e o perfil dos clientes.
+
+**Requisitos:**
+
+1. **Tabelas necessárias:**
+   - **Books**: armazena os dados dos livros.
+   - **Customers**: armazena os dados dos clientes.
+   - **Orders**: armazena os pedidos realizados por clientes.
+   - **Order_Items**: armazena os itens específicos de cada pedido (permitindo pedidos com múltiplos livros).
+
+2. **Estrutura das tabelas sugeridas:**
+
+   - **Books**
+     - `book_id` (INT) - Identificador único do livro
+     - `title` (VARCHAR) - Título do livro
+     - `author` (VARCHAR) - Autor do livro
+     - `genre` (VARCHAR) - Gênero literário
+     - `price` (DECIMAL) - Preço do livro
+     - `stock_quantity` (INT) - Quantidade em estoque
+
+   - **Customers**
+     - `customer_id` (INT) - Identificador único do cliente
+     - `first_name` (VARCHAR) - Nome do cliente
+     - `last_name` (VARCHAR) - Sobrenome do cliente
+     - `email` (VARCHAR) - Email do cliente
+     - `phone` (VARCHAR) - Telefone do cliente
+
+   - **Orders**
+     - `order_id` (INT) - Identificador único do pedido
+     - `customer_id` (INT) - ID do cliente que fez o pedido
+     - `order_date` (DATE) - Data do pedido
+     - `total_amount` (DECIMAL) - Valor total do pedido
+
+   - **Order_Items**
+     - `order_item_id` (INT) - Identificador único do item do pedido
+     - `order_id` (INT) - ID do pedido associado
+     - `book_id` (INT) - ID do livro associado
+     - `quantity` (INT) - Quantidade do livro no pedido
+     - `item_total` (DECIMAL) - Total (quantidade * preço do livro)
+
+---
+
+### Tarefas de SQL para Resolver:
+
+1. **Criação das Tabelas:** 
+   - Escreva as instruções SQL para criar as tabelas descritas.
+
+2. **Inserção de Dados de Exemplo:**
+   - Insira dados fictícios nas tabelas para simular uma loja funcionando (pelo menos 5 livros, 3 clientes, 3 pedidos com múltiplos itens em cada um).
+
+3. **Consultas SQL:**
+   - Listar todos os livros disponíveis no estoque, incluindo título, autor e quantidade.
+   - Consultar os detalhes do pedido, incluindo título do livro, quantidade e valor total do pedido.
+   - Exibir o total de gastos de cada cliente, com nome completo e valor total dos pedidos.
+   - Listar os autores dos livros mais comprados.
+   - Verificar o estoque, exibindo apenas os livros com quantidade inferior a 5 unidades.
+
+---
+
+### Resolução
+
+Realize cada uma dessas tarefas e depois me envie o SQL para que eu possa revisar e corrigir, se necessário. Boa sorte!
+
+
+CREATE TABLE BOOKS(
+	book_id  INT PRIMARY KEY,
+	title    VARCHAR(100),
+	author   VARCHAR (100),
+	genre    VARCHAR(100),
+	price    DECIMAL (10,2),
+	stock_quantity INT 
+
+);
+
+CREATE TABLE CUSTOMERS(
+	customer_id INT PRIMARY KEY,
+	first_name VARCHAR (100),
+	last_name VARCHAR (100),
+	email VARCHAR (100),
+	phone VARCHAR (15)
+
+);
+CREATE TABLE ORDERS(
+	order_id INT PRIMARY KEY ,
+	customer_id INT ,
+	order_date DATE,
+	total_amount DECIMAL(10,2),
+	FOREIGN KEY (customer_id) REFERENCES CUSTOMERS(customer_id)
+);
+
+CREATE TABLE ORDER_ITEMS(
+	order_item_id INT PRIMARY KEY ,
+	order_id INT,
+	book_id  INT,
+	quantity INT,
+	item_total DECIMAL
+	  FOREIGN KEY (order_id) REFERENCES ORDERS(order_id),
+    FOREIGN KEY (book_id) REFERENCES BOOKS(book_id)
+);
+
+-- Inserção de Dados
+INSERT INTO BOOKS(book_id ,title ,author ,genre ,price,stock_quantity)
+VALUES
+	(1,'Orçamento sem falhas','Kate Elizabeth Russell','educação',100.00,40),
+	(2,'O CONDE DE MONTE CRISTO','Alexandre Dumas','eficcção',300.00,50),
+	(3,'VIDAS SECAS ','Kate Graciliano Ramos','educação',100.00,40),
+	(4,'A HORA DA ESTRELA','William Shakespeare','romance',250.00,100),
+	(5,'OROMEU E JULIETA','Kate Elizabeth Russell','romance',250.00,10)
+
+INSERT INTO CUSTOMERS(customer_id ,first_name, last_name ,email ,phone )
+VALUES 
+	(12,'Joao Carlos','Almeida','joao@gmail.com',24998876545),
+	(14,'Maria','Souza','mari@gmail.com',24987876588),
+	(15,'Carlos Antonio','Ferreira','carlos@gmail.com',24998986550)
+
+INSERT INTO ORDERS(order_id, customer_id ,order_date ,total_amount )
+VALUES
+	(52,12,'2020-05-14',500),
+	(10,14,'2021-05-15',200),
+	(05,15,'2019-02-18',20)
+INSERT INTO ORDER_ITEMS(order_item_id ,order_id ,book_id,quantity,item_total )
+VALUES
+    ( 54,8,2,50,5000),
+	( 47,6,4,10,800),
+	( 35,4,1,20,2000)
